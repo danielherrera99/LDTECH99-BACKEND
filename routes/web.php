@@ -69,6 +69,9 @@ Route::get('/auth/users', [UserController::class, 'index']);
 Route::post('/auth/users', [UserController::class, 'store']);
 Route::put('/auth/users/{id}', [UserController::class, 'update']);
 Route::delete('/auth/users/{id}', [UserController::class, 'destroy']);
+Route::get('/auth/history', [UserController::class, 'getHistory']);
+Route::post('/auth/history', [UserController::class, 'addHistory']);
+Route::delete('/auth/history', [UserController::class, 'clearHistory']);
 
 // ─── Disparador Web Seguro para Migraciones en Hosting Gratis (Render) ───────
 Route::get('/db-migrate-secure-trigger', function() {

@@ -49,4 +49,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the search queries for the user.
+     */
+    public function searchQueries()
+    {
+        return $this->hasMany(SearchQuery::class);
+    }
 }

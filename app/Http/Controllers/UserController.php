@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\SearchQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -162,5 +163,106 @@ class UserController extends Controller
         $user->delete();
 
         return $this->corsResponse(['success' => true, 'message' => 'Usuario eliminado con éxito.']);
+    }
+
+    // 6. OBTENER HISTORIAL DE BÚSQUEDAS
+    public function getHistory(Request $request)
+    {
+        $username = $request->query('username');
+        if (!$username) {
+            return $this->corsResponse(['success' => false, 'message' => 'Username es requerido.'], 400);
+        }
+
+        $user = User::whereRaw('LOWER(username) = ?', [strtolower(trim($username))])->first();
+        if (!$user) {
+            return $this->corsResponse(['success' => false, 'message' => 'Usuario no encontrado.'], 404);
+        }
+
+        $history = SearchQuery::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get()
+            ->map(function ($q) {
+                return [
+                    'query' => $q->query,
+                    'module' => $q->module
+                ];
+            });
+
+        return $this->corsResponse(['success' => true, 'history' => $history]);
+    }
+
+    // 7. AGREGAR CONSULTA AL HISTORIAL
+    public function addHistory(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string',
+            'query' => 'required|string',
+            'module' => 'required|string',
+        ]);
+
+        $username = $request->input('username');
+        $queryVal = $request->input('query');
+        $module   = $request->input('module');
+
+        $user = User::whereRaw('LOWER(username) = ?', [strtolower(trim($username))])->first();
+        if (!$user) {
+            return $this->corsResponse(['success' => false, 'message' => 'Usuario no encontrado.'], 404);
+        }
+
+        // Evitar duplicados inmediatos deletreando consultas idénticas previas del mismo usuario
+        SearchQuery::where('user_id', $user->id)
+            ->where('query', $queryVal)
+            ->where('module', $module)
+            ->delete();
+
+        // Crear registro
+        SearchQuery::create([
+            'user_id' => $user->id,
+            'query'   => $queryVal,
+            'module'  => $module
+        ]);
+
+        // Auto-poda (Database Pruning): mantener solo las 10 búsquedas más recientes
+        $allQueries = SearchQuery::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        if ($allQueries->count() > 10) {
+            $idsToDelete = $allQueries->slice(10)->pluck('id');
+            SearchQuery::whereIn('id', $idsToDelete)->delete();
+        }
+
+        // Devolver historial completo e íntegro actualizado
+        $history = SearchQuery::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get()
+            ->map(function ($q) {
+                return [
+                    'query' => $q->query,
+                    'module' => $q->module
+                ];
+            });
+
+        return $this->corsResponse(['success' => true, 'history' => $history]);
+    }
+
+    // 8. VACIAR EL HISTORIAL COMPLETO
+    public function clearHistory(Request $request)
+    {
+        $username = $request->query('username');
+        if (!$username) {
+            return $this->corsResponse(['success' => false, 'message' => 'Username es requerido.'], 400);
+        }
+
+        $user = User::whereRaw('LOWER(username) = ?', [strtolower(trim($username))])->first();
+        if (!$user) {
+            return $this->corsResponse(['success' => false, 'message' => 'Usuario no encontrado.'], 404);
+        }
+
+        SearchQuery::where('user_id', $user->id)->delete();
+
+        return $this->corsResponse(['success' => true, 'message' => 'Historial de búsquedas vaciado con éxito.']);
     }
 }
