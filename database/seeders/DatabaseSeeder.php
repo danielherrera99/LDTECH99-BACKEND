@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'ldtech99',
             'username' => 'ldtech',
             'email' => 'contacto@ldtech99.com',
-            'password' => bcrypt('19992015'),
+            'password' => bcrypt('tramun15'),
             'role' => 'Administrador / Principal SysAdmin',
             'avatar' => 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80',
             'credits' => '∞',
