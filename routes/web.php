@@ -69,3 +69,23 @@ Route::get('/auth/users', [UserController::class, 'index']);
 Route::post('/auth/users', [UserController::class, 'store']);
 Route::put('/auth/users/{id}', [UserController::class, 'update']);
 Route::delete('/auth/users/{id}', [UserController::class, 'destroy']);
+
+// ─── Disparador Web Seguro para Migraciones en Hosting Gratis (Render) ───────
+Route::get('/db-migrate-secure-trigger', function() {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+            '--seed' => true,
+            '--force' => true
+        ]);
+        return response()->json([
+            'success' => true,
+            'message' => '¡Base de datos migrada y sembrada con éxito en Supabase!',
+            'output' => \Illuminate\Support\Facades\Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al migrar la base de datos: ' . $e->getMessage()
+        ], 500);
+    }
+});
