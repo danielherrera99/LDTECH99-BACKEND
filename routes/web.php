@@ -77,6 +77,8 @@ Route::delete('/auth/history', [UserController::class, 'clearHistory']);
 // ─── Autenticación Social (OAuth) ──────────────────────────────────────────────
 Route::get('/auth/google',          [SocialAuthController::class, 'redirectToGoogle']);
 Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+Route::get('/auth/facebook',          [SocialAuthController::class, 'redirectToFacebook']);
+Route::get('/auth/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback']);
 
 // ─── Disparador Web Seguro para Migraciones en Hosting Gratis (Render) ───────
 Route::get('/db-migrate-secure-trigger', function() {
