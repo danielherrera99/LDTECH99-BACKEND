@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConsultaController;
+use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -72,6 +73,10 @@ Route::delete('/auth/users/{id}', [UserController::class, 'destroy']);
 Route::get('/auth/history', [UserController::class, 'getHistory']);
 Route::post('/auth/history', [UserController::class, 'addHistory']);
 Route::delete('/auth/history', [UserController::class, 'clearHistory']);
+
+// ─── Autenticación Social (OAuth) ──────────────────────────────────────────────
+Route::get('/auth/google',          [SocialAuthController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
 // ─── Disparador Web Seguro para Migraciones en Hosting Gratis (Render) ───────
 Route::get('/db-migrate-secure-trigger', function() {

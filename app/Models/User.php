@@ -25,6 +25,8 @@ class User extends Authenticatable
         'role',
         'avatar',
         'credits',
+        'provider',
+        'provider_id',
     ];
 
     /**
