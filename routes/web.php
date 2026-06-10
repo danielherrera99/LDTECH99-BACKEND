@@ -25,6 +25,9 @@ Route::post('/consultas/dni-premium', [ConsultaController::class, 'consultarDniP
 // 4. DNIT Extendido (4 Imágenes Biométricas)  ·  5 Créditos
 Route::post('/consultas/dnit-extended', [ConsultaController::class, 'consultarDnitExtended'])->name('consultas.dnitExtended');
 
+// 4.1 Consulta DNIV (2 Imágenes)  ·  8 Créditos
+Route::post('/consultas/dniv', [ConsultaController::class, 'consultarDniv'])->name('consultas.dniv');
+
 // 5. Búsqueda por Nombres (NM)  ·  4 Créditos
 Route::post('/consultas/nm', [ConsultaController::class, 'consultarNm'])->name('consultas.nm');
 

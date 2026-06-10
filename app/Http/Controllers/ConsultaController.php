@@ -129,6 +129,17 @@ class ConsultaController extends Controller
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
+    //  4.1. CONSULTA DNIV (2 Imágenes Biométricas)  ·  8 Créditos
+    // ═══════════════════════════════════════════════════════════════════════════
+    public function consultarDniv(Request $request)
+    {
+        $request->validate(['dni' => 'required|digits:8']);
+        $dni = $request->input('dni');
+
+        return $this->checkCacheOrCall('dniv', $dni, false, "{$this->baseUrl}/fd/dniv/{$dni}");
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
     //  5. BÚSQUEDA POR NOMBRES (NM)  ·  4 Créditos
     // ═══════════════════════════════════════════════════════════════════════════
     public function consultarNm(Request $request)
