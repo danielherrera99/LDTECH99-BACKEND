@@ -128,15 +128,26 @@ class ConsultaController extends Controller
         return $this->checkCacheOrCall('dnit', $dni, false, "{$this->baseUrl}/fd/dnit/{$dni}");
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
     //  4.1. CONSULTA DNIV (2 Imágenes Biométricas)  ·  8 Créditos
-    // ═══════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
     public function consultarDniv(Request $request)
     {
         $request->validate(['dni' => 'required|digits:8']);
         $dni = $request->input('dni');
 
         return $this->checkCacheOrCall('dniv', $dni, false, "{$this->baseUrl}/fd/dniv/{$dni}");
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    //  4.2. CONSULTA DNIVEL (2 Imágenes Biométricas)  ·  8 Créditos
+    // ═══════════════════════════════════════════════════════════════════════════════
+    public function consultarDniveL(Request $request)
+    {
+        $request->validate(['dni' => 'required|digits:8']);
+        $dni = $request->input('dni');
+
+        return $this->checkCacheOrCall('dnivel', $dni, false, "{$this->baseUrl}/fd/dnivel/{$dni}");
     }
 
     // ═══════════════════════════════════════════════════════════════════════════

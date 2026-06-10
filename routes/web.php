@@ -28,6 +28,9 @@ Route::post('/consultas/dnit-extended', [ConsultaController::class, 'consultarDn
 // 4.1 Consulta DNIV (2 Imágenes)  ·  8 Créditos
 Route::post('/consultas/dniv', [ConsultaController::class, 'consultarDniv'])->name('consultas.dniv');
 
+// 4.2 Consulta DNIVEL (2 Imágenes)  ·  8 Créditos
+Route::post('/consultas/dnivel', [ConsultaController::class, 'consultarDniveL'])->name('consultas.dnivel');
+
 // 5. Búsqueda por Nombres (NM)  ·  4 Créditos
 Route::post('/consultas/nm', [ConsultaController::class, 'consultarNm'])->name('consultas.nm');
 
